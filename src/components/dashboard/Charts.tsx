@@ -90,6 +90,8 @@ export function MonthlyChart({ data }: MonthlyChartProps) {
           />
           <Tooltip
             contentStyle={tooltipStyle}
+            labelStyle={tooltipLabelStyle}
+            itemStyle={tooltipItemStyle}
             cursor={{ fill: "hsl(220, 15%, 18%)" }}
             formatter={(v) => [v, "Contenções"]}
           />
