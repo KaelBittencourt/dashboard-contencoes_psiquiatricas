@@ -50,6 +50,16 @@ const tooltipStyle = {
   fontSize: "13px",
 };
 
+const tooltipLabelStyle = {
+  color: "hsl(213, 31%, 91%)",
+  fontWeight: 600,
+  marginBottom: "4px",
+};
+
+const tooltipItemStyle = {
+  color: "hsl(213, 20%, 70%)",
+};
+
 interface MonthlyChartProps {
   data: MonthlyData[];
 }
