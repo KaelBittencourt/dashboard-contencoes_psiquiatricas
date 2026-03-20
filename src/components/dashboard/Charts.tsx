@@ -190,6 +190,8 @@ export function ChemicalPieChart({ records }: ChemicalPieChartProps) {
           </Pie>
           <Tooltip
             contentStyle={tooltipStyle}
+            labelStyle={tooltipLabelStyle}
+            itemStyle={tooltipItemStyle}
             formatter={(v) => [v, "Contenções"]}
           />
           <Legend
