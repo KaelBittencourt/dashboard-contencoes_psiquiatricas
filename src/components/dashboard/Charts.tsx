@@ -129,6 +129,8 @@ export function CIDChart({ data }: CIDChartProps) {
           />
           <Tooltip
             contentStyle={tooltipStyle}
+            labelStyle={tooltipLabelStyle}
+            itemStyle={tooltipItemStyle}
             cursor={{ fill: "hsl(220, 15%, 18%)" }}
             formatter={(v) => [v, "Contenções"]}
           />
