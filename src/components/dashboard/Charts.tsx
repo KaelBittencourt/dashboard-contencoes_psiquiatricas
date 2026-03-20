@@ -50,6 +50,16 @@ const tooltipStyle = {
   fontSize: "13px",
 };
 
+const tooltipLabelStyle = {
+  color: "hsl(213, 31%, 91%)",
+  fontWeight: 600,
+  marginBottom: "4px",
+};
+
+const tooltipItemStyle = {
+  color: "hsl(213, 20%, 70%)",
+};
+
 interface MonthlyChartProps {
   data: MonthlyData[];
 }
@@ -80,6 +90,8 @@ export function MonthlyChart({ data }: MonthlyChartProps) {
           />
           <Tooltip
             contentStyle={tooltipStyle}
+            labelStyle={tooltipLabelStyle}
+            itemStyle={tooltipItemStyle}
             cursor={{ fill: "hsl(220, 15%, 18%)" }}
             formatter={(v) => [v, "Contenções"]}
           />
@@ -117,6 +129,8 @@ export function CIDChart({ data }: CIDChartProps) {
           />
           <Tooltip
             contentStyle={tooltipStyle}
+            labelStyle={tooltipLabelStyle}
+            itemStyle={tooltipItemStyle}
             cursor={{ fill: "hsl(220, 15%, 18%)" }}
             formatter={(v) => [v, "Contenções"]}
           />
@@ -176,6 +190,8 @@ export function ChemicalPieChart({ records }: ChemicalPieChartProps) {
           </Pie>
           <Tooltip
             contentStyle={tooltipStyle}
+            labelStyle={tooltipLabelStyle}
+            itemStyle={tooltipItemStyle}
             formatter={(v) => [v, "Contenções"]}
           />
           <Legend
