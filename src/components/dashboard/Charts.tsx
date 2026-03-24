@@ -65,10 +65,23 @@ interface MonthlyChartProps {
 }
 
 export function MonthlyChart({ data }: MonthlyChartProps) {
+  const CustomBarLabel = ({ x, y, width, value }: any) => (
+    <text
+      x={x + width / 2}
+      y={y - 8}
+      fill="hsl(213, 20%, 75%)"
+      fontSize={12}
+      fontWeight={600}
+      textAnchor="middle"
+    >
+      {value > 0 ? value : ""}
+    </text>
+  );
+
   return (
     <ChartCard title="Evolução Mensal de Contenções" index={0}>
       <ResponsiveContainer width="100%" height={240}>
-        <BarChart data={data} barSize={28}>
+        <BarChart data={data} barSize={28} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="hsl(210, 100%, 56%)" stopOpacity={1} />
@@ -95,7 +108,13 @@ export function MonthlyChart({ data }: MonthlyChartProps) {
             cursor={{ fill: "hsl(220, 15%, 18%)" }}
             formatter={(v) => [v, "Contenções"]}
           />
-          <Bar dataKey="count" fill="url(#barGradient)" radius={[6, 6, 0, 0]} name="Contenções" />
+          <Bar 
+            dataKey="count" 
+            fill="url(#barGradient)" 
+            radius={[6, 6, 0, 0]} 
+            name="Contenções" 
+            label={<CustomBarLabel />}
+          />
         </BarChart>
       </ResponsiveContainer>
     </ChartCard>
@@ -107,41 +126,121 @@ interface CIDChartProps {
 }
 
 export function CIDChart({ data }: CIDChartProps) {
+  const totalCount = data.reduce((sum, d) => sum + d.count, 0);
+  const chartHeight = Math.max(240, data.length * 38 + 40);
+
+  const CustomYAxisTick = ({ x, y, payload }: any) => (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={-4}
+        y={0}
+        dy={4}
+        textAnchor="end"
+        fill="hsl(213, 20%, 75%)"
+        fontSize={12}
+        fontWeight={500}
+      >
+        {payload.value}
+      </text>
+    </g>
+  );
+
+  const CustomBarLabel = ({ x, y, width, height, value }: any) => (
+    <text
+      x={x + width + 8}
+      y={y + height / 2}
+      dy={4}
+      fill="hsl(213, 20%, 60%)"
+      fontSize={11}
+      fontWeight={500}
+    >
+      {value}
+    </text>
+  );
+
   return (
-    <ChartCard title="Distribuição por CID" index={1}>
-      <ResponsiveContainer width="100%" height={240}>
-        <BarChart data={data} layout="vertical" barSize={18}>
-          <CartesianGrid strokeDasharray="3 3" stroke="hsl(220, 15%, 18%)" horizontal={false} />
-          <XAxis
-            type="number"
-            tick={{ fill: "hsl(213, 20%, 55%)", fontSize: 12 }}
-            axisLine={false}
-            tickLine={false}
-            allowDecimals={false}
-          />
-          <YAxis
-            dataKey="cid"
-            type="category"
-            tick={{ fill: "hsl(213, 20%, 55%)", fontSize: 11 }}
-            axisLine={false}
-            tickLine={false}
-            width={80}
-          />
-          <Tooltip
-            contentStyle={tooltipStyle}
-            labelStyle={tooltipLabelStyle}
-            itemStyle={tooltipItemStyle}
-            cursor={{ fill: "hsl(220, 15%, 18%)" }}
-            formatter={(v) => [v, "Contenções"]}
-          />
-          <Bar dataKey="count" radius={[0, 6, 6, 0]} name="Contenções">
-            {data.map((_, index) => (
-              <Cell key={index} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
-    </ChartCard>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+      className="p-6 rounded-2xl bg-card border border-border flex flex-col"
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between mb-5">
+        <h3 className="font-display text-sm font-semibold text-foreground uppercase tracking-wide">
+          Distribuição por CID
+        </h3>
+        <span className="text-xs text-muted-foreground bg-muted px-2.5 py-1 rounded-full">
+          {data.length} {data.length === 1 ? "código" : "códigos"}
+        </span>
+      </div>
+
+      {/* Chart */}
+      <div className="flex-1">
+        <ResponsiveContainer width="100%" height={chartHeight}>
+          <BarChart
+            data={data}
+            layout="vertical"
+            barSize={16}
+            margin={{ top: 0, right: 40, left: 0, bottom: 0 }}
+          >
+            <defs>
+              {COLORS.map((color, i) => (
+                <linearGradient key={i} id={`cidGrad${i}`} x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor={color} stopOpacity={0.85} />
+                  <stop offset="100%" stopColor={color} stopOpacity={1} />
+                </linearGradient>
+              ))}
+            </defs>
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke="hsl(220, 15%, 16%)"
+              horizontal={false}
+            />
+            <XAxis
+              type="number"
+              tick={{ fill: "hsl(213, 20%, 45%)", fontSize: 11 }}
+              axisLine={false}
+              tickLine={false}
+              allowDecimals={false}
+            />
+            <YAxis
+              dataKey="cid"
+              type="category"
+              tick={<CustomYAxisTick />}
+              axisLine={false}
+              tickLine={false}
+              width={70}
+            />
+            <Tooltip
+              contentStyle={tooltipStyle}
+              labelStyle={tooltipLabelStyle}
+              itemStyle={tooltipItemStyle}
+              cursor={{ fill: "hsl(220, 15%, 14%)", radius: 4 }}
+              formatter={(v: number) => [`${v} (${totalCount > 0 ? ((v / totalCount) * 100).toFixed(1) : 0}%)`, "Contenções"]}
+            />
+            <Bar dataKey="count" radius={[0, 8, 8, 0]} name="Contenções" label={<CustomBarLabel />}>
+              {data.map((_, index) => (
+                <Cell key={index} fill={`url(#cidGrad${index % COLORS.length})`} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Footer summary */}
+      <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-between">
+        <span className="text-xs text-muted-foreground">
+          Total de registros: <span className="text-foreground font-medium">{totalCount}</span>
+        </span>
+        {data.length > 0 && (
+          <span className="text-xs text-muted-foreground">
+            CID mais frequente:{" "}
+            <span className="text-primary font-medium">{data[0].cid}</span>
+          </span>
+        )}
+      </div>
+    </motion.div>
   );
 }
 

@@ -16,7 +16,7 @@ interface DashboardProps {
 
 export function Dashboard({ records, fileName, onReset }: DashboardProps) {
   const [filters, setFilters] = useState<DashboardFilters>({
-    dateStart: "",
+    dateStart: "2022-08-01",
     dateEnd: "",
     cid: "all",
     type: "all",
@@ -52,7 +52,7 @@ export function Dashboard({ records, fileName, onReset }: DashboardProps) {
         onReset={onReset}
       />
 
-      <div className="px-6 py-6 space-y-6">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 xl:px-16 py-6 space-y-8">
         {/* KPI Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <KPICard
@@ -93,7 +93,7 @@ export function Dashboard({ records, fileName, onReset }: DashboardProps) {
         <MonthlyChart data={monthlyData} />
 
         {/* CID chart + Pie chart */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           <CIDChart data={cidData} />
           <ChemicalPieChart records={filtered} />
         </div>

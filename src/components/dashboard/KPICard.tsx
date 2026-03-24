@@ -50,24 +50,33 @@ export function KPICard({ title, value, subtitle, icon: Icon, color, index }: KP
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className={`
-        relative p-5 rounded-2xl border bg-card
+        relative p-6 rounded-2xl border bg-card
         ${colors.border} ${colors.glow}
         hover:scale-[1.02] transition-transform duration-200
+        overflow-hidden
       `}
     >
-      <div className="flex items-start justify-between mb-4">
-        <div className={`p-2.5 rounded-xl ${colors.bg}`}>
-          <Icon className={`w-5 h-5 ${colors.icon}`} />
-        </div>
-        <div className={`w-2 h-2 rounded-full ${colors.dot} opacity-60`} />
-      </div>
+      {/* Decorative dot in the top right */}
+      <div className={`absolute top-4 right-4 w-2 h-2 rounded-full ${colors.dot} opacity-60`} />
 
-      <div className="space-y-1">
-        <p className="text-muted-foreground text-xs font-medium uppercase tracking-wider">{title}</p>
-        <p className="font-display text-2xl font-bold text-foreground leading-none">{value}</p>
-        {subtitle && (
-          <p className="text-muted-foreground text-xs">{subtitle}</p>
-        )}
+      <div className="flex items-center gap-5">
+        <div className={`shrink-0 p-4 rounded-2xl ${colors.bg}`}>
+          <Icon className={`w-7 h-7 ${colors.icon}`} />
+        </div>
+        
+        <div className="flex-1 space-y-1.5 min-w-0">
+          <p className="text-muted-foreground text-[11px] font-semibold uppercase tracking-wider truncate">
+            {title}
+          </p>
+          <p className="font-display text-2xl lg:text-3xl font-bold text-foreground leading-none tracking-tight">
+            {value}
+          </p>
+          {subtitle && (
+            <p className="text-muted-foreground text-xs truncate">
+              {subtitle}
+            </p>
+          )}
+        </div>
       </div>
     </motion.div>
   );
