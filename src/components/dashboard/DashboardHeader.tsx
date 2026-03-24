@@ -1,6 +1,12 @@
 import { motion } from "framer-motion";
-import { Calendar, Filter, RotateCcw, RefreshCw } from "lucide-react";
+import { Calendar, Filter, RotateCcw, RefreshCw, ChevronDown, FileText, Image as ImageIcon, Printer, Download } from "lucide-react";
 import type { DashboardFilters } from "@/types/restraint";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface DashboardHeaderProps {
   filters: DashboardFilters;
@@ -8,6 +14,8 @@ interface DashboardHeaderProps {
   cidOptions: string[];
   totalRecords: number;
   onReset: () => void;
+  onExport: (type: 'pdf' | 'img' | 'print') => void;
+  isExporting?: boolean;
 }
 
 export function DashboardHeader({
@@ -16,6 +24,8 @@ export function DashboardHeader({
   cidOptions,
   totalRecords,
   onReset,
+  onExport,
+  isExporting = false,
 }: DashboardHeaderProps) {
   const update = (key: keyof DashboardFilters, value: string) => {
     onFilterChange({ ...filters, [key]: value });
@@ -25,7 +35,7 @@ export function DashboardHeader({
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="sticky top-0 z-10 border-b border-border bg-background/90 backdrop-blur-sm"
+      className="sticky top-0 z-10 border-b border-border bg-background/90 backdrop-blur-sm print:hidden"
     >
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 xl:px-16 py-4">
         {/* Title row */}
@@ -44,13 +54,45 @@ export function DashboardHeader({
             </div>
           </div>
 
-          <button
-            onClick={onReset}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-muted border border-border transition-all"
-          >
-            <RefreshCw className="w-4 h-4" />
-            Recarregar dados
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onReset}
+              className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-muted border border-border transition-all"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Recarregar dados
+            </button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  disabled={isExporting}
+                  className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-primary-foreground bg-primary hover:bg-primary/90 transition-all disabled:opacity-50"
+                >
+                  {isExporting ? (
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Download className="w-4 h-4" />
+                  )}
+                  {isExporting ? "Exportando..." : "Exportar"}
+                  <ChevronDown className="w-4 h-4 opacity-70" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem onClick={() => onExport('pdf')} className="cursor-pointer gap-2">
+                  <FileText className="w-4 h-4" />
+                  <span>Exportar como PDF</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onExport('img')} className="cursor-pointer gap-2">
+                  <ImageIcon className="w-4 h-4" />
+                  <span>Exportar como Imagem</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onExport('print')} className="cursor-pointer gap-2">
+                  <Printer className="w-4 h-4" />
+                  <span>Imprimir</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
 
         {/* Filters row */}

@@ -1,6 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { Activity, Users, FlaskConical, Clock } from "lucide-react";
 import { motion } from "framer-motion";
+import { toJpeg } from "html-to-image";
+import jsPDF from "jspdf";
 import type { RestraintRecord, DashboardFilters } from "@/types/restraint";
 import { filterRecords, getKPIs, getMonthlyData, getCIDData } from "@/lib/excelParser";
 import { DashboardHeader } from "./DashboardHeader";
@@ -21,6 +23,55 @@ export function Dashboard({ records, fileName, onReset }: DashboardProps) {
     cid: "all",
     type: "all",
   });
+  const [isExporting, setIsExporting] = useState(false);
+  const dashboardRef = useRef<HTMLDivElement>(null);
+
+  const handleExport = async (type: 'pdf' | 'img' | 'print') => {
+    if (type === 'print') {
+      window.print();
+      return;
+    }
+
+    if (!dashboardRef.current) return;
+    
+    setIsExporting(true);
+    try {
+      // Delay it to ensure layout stabilizes after dropdown closes
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      const dataUrl = await toJpeg(dashboardRef.current, {
+        quality: 1,
+        pixelRatio: 2,
+        backgroundColor: "#09090b",
+      });
+
+      if (type === 'img') {
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = "dashboard-contencoes.jpg";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else if (type === 'pdf') {
+        const width = dashboardRef.current.offsetWidth;
+        const height = dashboardRef.current.offsetHeight;
+        
+        const pdf = new jsPDF({
+          orientation: width > height ? "landscape" : "portrait",
+          unit: "px",
+          format: [width, height],
+        });
+
+        pdf.addImage(dataUrl, "JPEG", 0, 0, width, height);
+        pdf.save("dashboard-contencoes.pdf");
+      }
+    } catch (error) {
+      console.error("Erro ao gerar exportação:", error);
+      alert("Ocorreu um erro ao gerar a exportação. Tente novamente.");
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   const cidOptions = useMemo(() => {
     const unique = new Set(records.map((r) => r.cid));
@@ -43,13 +94,15 @@ export function Dashboard({ records, fileName, onReset }: DashboardProps) {
   }, [kpis.avgDuration]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" ref={dashboardRef}>
       <DashboardHeader
         filters={filters}
         onFilterChange={setFilters}
         cidOptions={cidOptions}
         totalRecords={records.length}
         onReset={onReset}
+        onExport={handleExport}
+        isExporting={isExporting}
       />
 
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 xl:px-16 py-6 space-y-8">
