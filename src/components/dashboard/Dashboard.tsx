@@ -26,12 +26,7 @@ export function Dashboard({ records, fileName, onReset }: DashboardProps) {
   const [isExporting, setIsExporting] = useState(false);
   const dashboardRef = useRef<HTMLDivElement>(null);
 
-  const handleExport = async (type: 'pdf' | 'img' | 'print') => {
-    if (type === 'print') {
-      window.print();
-      return;
-    }
-
+  const handleExport = async (type: 'pdf' | 'img') => {
     if (!dashboardRef.current) return;
     
     setIsExporting(true);

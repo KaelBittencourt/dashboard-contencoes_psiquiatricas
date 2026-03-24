@@ -14,7 +14,7 @@ interface DashboardHeaderProps {
   cidOptions: string[];
   totalRecords: number;
   onReset: () => void;
-  onExport: (type: 'pdf' | 'img' | 'print') => void;
+  onExport: (type: 'pdf' | 'img') => void;
   isExporting?: boolean;
 }
 
@@ -85,10 +85,6 @@ export function DashboardHeader({
                 <DropdownMenuItem onClick={() => onExport('img')} className="cursor-pointer gap-2">
                   <ImageIcon className="w-4 h-4" />
                   <span>Exportar como Imagem</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => onExport('print')} className="cursor-pointer gap-2">
-                  <Printer className="w-4 h-4" />
-                  <span>Imprimir</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
