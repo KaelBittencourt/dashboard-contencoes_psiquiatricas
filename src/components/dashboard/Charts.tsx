@@ -108,11 +108,11 @@ export function MonthlyChart({ data }: MonthlyChartProps) {
             cursor={{ fill: "hsl(220, 15%, 18%)" }}
             formatter={(v) => [v, "Contenções"]}
           />
-          <Bar 
-            dataKey="count" 
-            fill="url(#barGradient)" 
-            radius={[6, 6, 0, 0]} 
-            name="Contenções" 
+          <Bar
+            dataKey="count"
+            fill="url(#barGradient)"
+            radius={[6, 6, 0, 0]}
+            name="Contenções"
             label={<CustomBarLabel />}
           />
         </BarChart>
@@ -263,45 +263,85 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 export function ChemicalPieChart({ records }: ChemicalPieChartProps) {
   const chemical = records.filter((r) => r.isChemical).length;
   const mechanical = records.length - chemical;
+  const total = chemical + mechanical;
 
   const data = [
-    { name: "Contenção Química", value: chemical },
-    { name: "Contenção Mecânica", value: mechanical },
+    { name: "Contenção Química", value: chemical, color: "hsl(172, 66%, 50%)", grad: "pieGrad0" },
+    { name: "Contenção Mecânica", value: mechanical, color: "hsl(210, 100%, 56%)", grad: "pieGrad1" },
   ].filter((d) => d.value > 0);
 
   return (
-    <ChartCard title="Contenção Química vs Mecânica" index={2}>
-      <ResponsiveContainer width="100%" height={240}>
-        <PieChart>
-          <Pie
-            data={data}
-            cx="50%"
-            cy="45%"
-            outerRadius={85}
-            innerRadius={45}
-            paddingAngle={3}
-            dataKey="value"
-            labelLine={false}
-            label={renderCustomizedLabel}
-          >
-            <Cell fill="hsl(172, 66%, 50%)" />
-            <Cell fill="hsl(210, 100%, 56%)" />
-          </Pie>
-          <Tooltip
-            contentStyle={tooltipStyle}
-            labelStyle={tooltipLabelStyle}
-            itemStyle={tooltipItemStyle}
-            formatter={(v) => [v, "Contenções"]}
-          />
-          <Legend
-            iconType="circle"
-            iconSize={8}
-            formatter={(value) => (
-              <span style={{ color: "hsl(213, 20%, 55%)", fontSize: "12px" }}>{value}</span>
-            )}
-          />
-        </PieChart>
-      </ResponsiveContainer>
-    </ChartCard>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.3 }}
+      className="p-6 rounded-2xl bg-card border border-border flex flex-col h-full"
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="font-display text-sm font-semibold text-foreground uppercase tracking-wide">
+          Química vs Mecânica
+        </h3>
+        <span className="text-xs text-muted-foreground bg-muted px-2.5 py-1 rounded-full">
+          Geral
+        </span>
+      </div>
+
+      {/* Chart Area */}
+      <div className="flex-1 flex flex-col justify-center items-center min-h-[220px]">
+        <ResponsiveContainer width="100%" height={240}>
+          <PieChart>
+            <defs>
+              <linearGradient id="pieGrad0" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="hsl(172, 66%, 50%)" stopOpacity={1} />
+                <stop offset="100%" stopColor="hsl(172, 66%, 50%)" stopOpacity={0.6} />
+              </linearGradient>
+              <linearGradient id="pieGrad1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="hsl(210, 100%, 56%)" stopOpacity={1} />
+                <stop offset="100%" stopColor="hsl(210, 100%, 56%)" stopOpacity={0.6} />
+              </linearGradient>
+            </defs>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              innerRadius={65}
+              outerRadius={95}
+              paddingAngle={6}
+              cornerRadius={8}
+              dataKey="value"
+              stroke="none"
+              labelLine={false}
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={`url(#${entry.grad})`} />
+              ))}
+            </Pie>
+            <Tooltip
+              contentStyle={tooltipStyle}
+              labelStyle={tooltipLabelStyle}
+              itemStyle={tooltipItemStyle}
+              formatter={(v: number) => [`${v} (${total > 0 ? ((v / total) * 100).toFixed(1) : 0}%)`, "Contenções"]}
+            />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Footer summary */}
+      <div className="mt-4 pt-4 border-t border-border/50 grid grid-cols-2 gap-4">
+        <div className="flex flex-col">
+          <span className="text-xs text-muted-foreground mb-1">Contenção Química</span>
+          <span className="text-xl font-bold font-display" style={{ color: "hsl(172, 66%, 50%)" }}>
+            {total > 0 ? Math.round((chemical / total) * 100) : 0}%
+          </span>
+        </div>
+        <div className="flex flex-col pl-4 border-l border-border/50">
+          <span className="text-xs text-muted-foreground mb-1">Contenção Mecânica</span>
+          <span className="text-xl font-bold font-display" style={{ color: "hsl(210, 100%, 56%)" }}>
+            {total > 0 ? Math.round((mechanical / total) * 100) : 0}%
+          </span>
+        </div>
+      </div>
+    </motion.div>
   );
 }
