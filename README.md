@@ -1,73 +1,49 @@
-# Welcome to your Lovable project
+# Dashboard de Contenções Psiquiátricas
 
-## Project info
+Uma aplicação analítica focada em saúde mental hospitalar para monitorar indicadores essenciais como duração de ações (mecânicas ou químicas), CIDs mais frequentes e evolução mensal de contenções.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+![Visão Geral do Dashboard](public/docs/dashboard_main.png)
 
-## How can I edit this code?
+## Funcionalidades e Características
 
-There are several ways of editing your application.
+- **Leitura Direta Automática**: Não é mais necessário subir arquivos! Os dados são puxados, de forma dinâmica e automática, diretamente a partir de um [Google Sheets](https://docs.google.com/spreadsheets/d/1yP8XVNCX0G_KXoQIxfXSj9gaBGyIyWy-j6rQ3GQnuqI/edit?usp=sharing) público preenchido pela equipe médica/gestão utilizando o formato Excel (XLSX).
+- **KPIs em Tempo Real**: Cards interativos no topo com métricas rápidas de Total de Contenções, Pacientes Únicos, Contenção Química (%) e Tempo Médio das ocorrências.
+- **Gráficos Dinâmicos**: Evolução diária/mensal, separação minuciosa de tipos (Mecânica e Química) usando Donut Charts, e barras de gradiente com design moderno.
+- **Filtros Ágeis**: Interação em tempo real. Puxe informações por intervalo de datas (com o campo flexível padronizado) ou CID rapidamente na mesma interface unificada em topbar, sem rolagem.
+- **Tema Premium Dark Mode**: Uma paleta escurecida com tons azuis vibrantes e glassmorphism pensada em criar a melhor legibilidade e evitar fadiga visual da tela durante horas de estudo de dados. Layout responsivo com max-width aprimorado para telas Full HD e telas de notebook.
 
-**Use Lovable**
+## Gráficos Modernizados
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+O sistema conta com Recharts para as renderizações mais robustas baseadas nos dados lidos:
 
-Changes made via Lovable will be committed automatically to this repo.
+![Gráficos Detalhados](public/docs/dashboard_charts.png)
 
-**Use your preferred IDE**
+## Tecnologias e Stack
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- [Vite](https://vitejs.dev/) - Bundle pipeline ultra-rápida.
+- [React](https://react.dev/) - Biblioteca base para as engrenagens de interface e views dinâmicas.
+- [Tailwind CSS](https://tailwindcss.com/) - Estilização completa unida na beleza de classes utilitárias no template em Dark Mode.
+- [shadcn/ui](https://ui.shadcn.com/) - Sistema de UI componentizado.
+- [Recharts](https://recharts.org/) - Geração analítica e interativa dos gráficos.
+- [Framer Motion](https://www.framer.com/motion/) - Animações suaves nos modais e entrada natural de KPIs na renderização da página.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Instruções de Inicialização
 
-Follow these steps:
+Se deseja rodar ou continuar melhorando o projeto em sua máquina local. Tenha o Node.js e o pacote npm instalados no seu ambiente.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+1. Clone o repositório.
+2. Acesse a pasta do projeto:
+```bash
+cd containment-sight
+```
+3. Instale as dependências essenciais:
+```bash
+npm install
+```
+4. Suba o servidor de desenvolvimento:
+```bash
 npm run dev
 ```
+5. Acesse localmente (geralmente via `http://localhost:5173` ou `8080`). O projeto carregará automaticamente sua planilha online do Google Sheets.
 
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Desenvolvido para máxima otimização da gestão e insights psiquiátricos!
