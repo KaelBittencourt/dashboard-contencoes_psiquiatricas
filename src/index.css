@@ -52,6 +52,8 @@
     --gradient-card: linear-gradient(145deg, hsl(220 18% 13%) 0%, hsl(220 18% 11%) 100%);
     --gradient-primary: linear-gradient(135deg, hsl(210 100% 56%) 0%, hsl(210 100% 45%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(172 66% 50%) 0%, hsl(172 66% 40%) 100%);
+    --gradient-modal: linear-gradient(180deg, hsl(220 18% 14%) 0%, hsl(220 20% 8%) 100%);
+
 
     --shadow-card: 0 4px 24px -4px hsl(220 20% 4% / 0.6);
     --shadow-glow: 0 0 20px hsl(210 100% 56% / 0.15);

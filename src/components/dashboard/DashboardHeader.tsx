@@ -7,6 +7,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DatePicker } from "./DatePicker";
+
 
 interface DashboardHeaderProps {
   filters: DashboardFilters;
@@ -93,33 +95,22 @@ export function DashboardHeader({
 
         {/* Filters row */}
         <div className="flex items-end gap-2.5 w-full">
-          {/* Date Start */}
-          <div className="flex flex-col gap-1 w-[135px] shrink-0">
-            <label className="text-xs text-muted-foreground font-medium">Data inicial</label>
-            <div className="relative">
-              <input
-                type="date"
-                value={filters.dateStart}
-                onChange={(e) => update("dateStart", e.target.value)}
-                className="w-full pl-3 pr-8 py-2 h-[38px] bg-card border border-border rounded-xl text-[13px] text-foreground focus:outline-none focus:ring-1 focus:ring-primary relative [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:z-10"
-              />
-              <Calendar className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white pointer-events-none" />
-            </div>
-          </div>
+          {/* Date Picker Start */}
+          <DatePicker 
+            date={filters.dateStart}
+            onChange={(d) => update("dateStart", d)}
+            label="Data inicial"
+            className="w-[145px] shrink-0"
+          />
 
-          {/* Date End */}
-          <div className="flex flex-col gap-1 w-[135px] shrink-0">
-            <label className="text-xs text-muted-foreground font-medium">Data final</label>
-            <div className="relative">
-              <input
-                type="date"
-                value={filters.dateEnd}
-                onChange={(e) => update("dateEnd", e.target.value)}
-                className="w-full pl-3 pr-8 py-2 h-[38px] bg-card border border-border rounded-xl text-[13px] text-foreground focus:outline-none focus:ring-1 focus:ring-primary relative [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:z-10"
-              />
-              <Calendar className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white pointer-events-none" />
-            </div>
-          </div>
+          {/* Date Picker End */}
+          <DatePicker 
+            date={filters.dateEnd}
+            onChange={(d) => update("dateEnd", d)}
+            label="Data final"
+            className="w-[145px] shrink-0"
+          />
+
 
           {/* CID */}
           <div className="flex flex-col gap-1 flex-1 min-w-[100px] max-w-[200px]">

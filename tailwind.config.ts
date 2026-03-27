@@ -80,7 +80,9 @@ export default {
         "gradient-card": "var(--gradient-card)",
         "gradient-primary": "var(--gradient-primary)",
         "gradient-accent": "var(--gradient-accent)",
+        "modal-gradient": "var(--gradient-modal)",
       },
+
       boxShadow: {
         card: "var(--shadow-card)",
         glow: "var(--shadow-glow)",

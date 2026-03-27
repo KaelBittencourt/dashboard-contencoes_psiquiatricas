@@ -3,6 +3,25 @@ import { motion } from "framer-motion";
 import { Search, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, FlaskConical } from "lucide-react";
 import type { RestraintRecord } from "@/types/restraint";
 import { formatDate, formatDuration } from "@/lib/excelParser";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
+import { 
+  Calendar, 
+  Clock, 
+  User, 
+  FileText, 
+  Stethoscope, 
+  AlertCircle, 
+  Activity,
+  ArrowRight
+} from "lucide-react";
+
 
 interface DataTableProps {
   records: RestraintRecord[];
@@ -18,6 +37,14 @@ export function DataTable({ records }: DataTableProps) {
   const [sortKey, setSortKey] = useState<SortKey>("startDate");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [page, setPage] = useState(1);
+  const [selectedRecord, setSelectedRecord] = useState<RestraintRecord | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleRowClick = (record: RestraintRecord) => {
+    setSelectedRecord(record);
+    setIsModalOpen(true);
+  };
+
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
@@ -143,11 +170,13 @@ export function DataTable({ records }: DataTableProps) {
               paginated.map((r, i) => (
                 <tr
                   key={r.id}
+                  onClick={() => handleRowClick(r)}
                   className={`
-                    border-b border-border/50 hover:bg-muted/30 transition-colors
+                    border-b border-border/50 hover:bg-muted/50 transition-colors cursor-pointer group
                     ${i % 2 === 0 ? "" : "bg-muted/10"}
                   `}
                 >
+
                   <td className="px-4 py-3 text-sm font-medium text-foreground truncate max-w-[160px]">
                     {r.patientName}
                   </td>
@@ -236,6 +265,146 @@ export function DataTable({ records }: DataTableProps) {
           </button>
         </div>
       </div>
+
+
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="max-w-2xl sm:rounded-2xl p-0 overflow-hidden border-none shadow-2xl bg-modal-gradient">
+          <div className="bg-card/50 backdrop-blur-xl border border-white/10 p-6">
+            <DialogHeader className="mb-6">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <User className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <DialogTitle className="text-xl font-display font-bold text-foreground">
+                    Detalhes da Contenção
+                  </DialogTitle>
+                  <DialogDescription className="text-muted-foreground">
+                    Informações completas do registro selecionado
+                  </DialogDescription>
+                </div>
+              </div>
+            </DialogHeader>
+
+            {selectedRecord && (
+              <div className="space-y-6">
+                {/* Patient section */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-muted/40 p-4 rounded-xl border border-border/50">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                      <User className="w-3.5 h-3.5" />
+                      Paciente
+                    </div>
+                    <p className="text-foreground font-medium text-lg capitalize">
+                      {selectedRecord.patientName}
+                    </p>
+                  </div>
+                  <div className="bg-muted/40 p-4 rounded-xl border border-border/50">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                      <Stethoscope className="w-3.5 h-3.5" />
+                      Diagnóstico (CID)
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="font-mono text-sm bg-primary/10 text-primary border-none">
+                        {selectedRecord.cid}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Status Section */}
+                <div className="flex flex-wrap gap-3">
+                  {selectedRecord.isChemical ? (
+                    <Badge className="bg-amber-500/10 text-amber-500 border-amber-500/20 px-3 py-1 flex items-center gap-1.5 rounded-lg">
+                      <FlaskConical className="w-4 h-4" />
+                      Contenção Química
+                    </Badge>
+                  ) : (
+                    <Badge className="bg-blue-500/10 text-blue-500 border-blue-500/20 px-3 py-1 flex items-center gap-1.5 rounded-lg">
+                      <Activity className="w-4 h-4" />
+                      Contenção Mecânica
+                    </Badge>
+                  )}
+                  {selectedRecord.medication && (
+                    <Badge variant="outline" className="px-3 py-1 flex items-center gap-1.5 rounded-lg border-primary/20 text-primary">
+                      <AlertCircle className="w-4 h-4" />
+                      {selectedRecord.medication}
+                    </Badge>
+                  )}
+                </div>
+
+                {/* Timeline Section */}
+                <div className="bg-muted/20 p-5 rounded-2xl border border-border/50">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+                    <Clock className="w-3.5 h-3.5" />
+                    Cronologia do Evento
+                  </div>
+                  
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <div className="flex-1 flex flex-col items-center sm:items-start">
+                      <span className="text-xs text-muted-foreground mb-1">Início</span>
+                      <div className="flex items-center gap-2 text-foreground font-semibold">
+                        <Calendar className="w-4 h-4 text-primary/60" />
+                        {formatDate(selectedRecord.startDate)}
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-col items-center">
+                      <div className="h-px w-20 bg-gradient-to-r from-transparent via-border to-transparent hidden sm:block mb-2"></div>
+                      <Badge variant="secondary" className="text-xs py-1 px-3 bg-primary text-primary-foreground font-bold rounded-full">
+                        {formatDuration(selectedRecord.durationMinutes)}
+                      </Badge>
+                    </div>
+
+                    <div className="flex-1 flex flex-col items-center sm:items-end">
+                      <span className="text-xs text-muted-foreground mb-1">Término</span>
+                      <div className="flex items-center gap-2 text-foreground font-semibold">
+                        <Calendar className="w-4 h-4 text-primary/60" />
+                        {formatDate(selectedRecord.endDate)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Reason & Notes */}
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      <FileText className="w-3.5 h-3.5" />
+                      Justificativa / Motivo
+                    </div>
+                    <div className="bg-muted/30 p-4 rounded-xl border border-border/50 text-sm text-foreground leading-relaxed italic">
+                      "{selectedRecord.reason || "Nenhuma justificativa fornecida"}"
+                    </div>
+                  </div>
+
+                  {selectedRecord.notes && (
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                        <Activity className="w-3.5 h-3.5" />
+                        Observações Adicionais
+                      </div>
+                      <div className="bg-muted/30 p-4 rounded-xl border border-border/50 text-sm text-muted-foreground">
+                        {selectedRecord.notes}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            <div className="mt-8 flex justify-end">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="px-6 py-2.5 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:opacity-90 transition-opacity shadow-lg shadow-primary/20"
+              >
+                Fechar Detalhes
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </motion.div>
   );
 }
+
