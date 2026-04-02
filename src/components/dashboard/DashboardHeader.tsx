@@ -57,6 +57,14 @@ export function DashboardHeader({
           </div>
 
           <div className="flex items-center gap-2">
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSfDL4r2FkYL5eDeZ-dRzxTpsORCLWvWE5Aogk_w-14vQ2ua2g/viewform"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-primary bg-primary/10 hover:bg-primary/20 border border-primary/20 transition-all font-medium"
+            >
+              Preencher Formulário
+            </a>
             <button
               onClick={onReset}
               className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-muted border border-border transition-all"
