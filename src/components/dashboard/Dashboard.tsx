@@ -16,12 +16,24 @@ interface DashboardProps {
   onReset: () => void;
 }
 
+function yearsInRecords(records: RestraintRecord[]) {
+  const years = new Set<number>();
+  for (const record of records) {
+    const year = Number(record.month.slice(0, 4));
+    if (year) years.add(year);
+  }
+  return Array.from(years).sort((a, b) => b - a);
+}
+
 export function Dashboard({ records, fileName, onReset }: DashboardProps) {
-  const [filters, setFilters] = useState<DashboardFilters>({
-    dateStart: "2022-08-01",
-    dateEnd: "",
-    cid: "all",
-    type: "all",
+  const [filters, setFilters] = useState<DashboardFilters>(() => {
+    const latestYear = yearsInRecords(records)[0];
+    return {
+      months: [],
+      years: latestYear ? [latestYear] : [],
+      cid: "all",
+      type: "all",
+    };
   });
   const [isExporting, setIsExporting] = useState(false);
   const dashboardRef = useRef<HTMLDivElement>(null);
@@ -37,7 +49,7 @@ export function Dashboard({ records, fileName, onReset }: DashboardProps) {
       const dataUrl = await toJpeg(dashboardRef.current, {
         quality: 1,
         pixelRatio: 2,
-        backgroundColor: "#09090b",
+        backgroundColor: getComputedStyle(dashboardRef.current).backgroundColor,
       });
 
       if (type === 'img') {
@@ -73,6 +85,8 @@ export function Dashboard({ records, fileName, onReset }: DashboardProps) {
     return Array.from(unique).sort();
   }, [records]);
 
+  const yearOptions = useMemo(() => yearsInRecords(records), [records]);
+
   const filtered = useMemo(() => filterRecords(records, filters), [records, filters]);
 
   const kpis = useMemo(() => getKPIs(filtered), [filtered]);
@@ -94,6 +108,7 @@ export function Dashboard({ records, fileName, onReset }: DashboardProps) {
         filters={filters}
         onFilterChange={setFilters}
         cidOptions={cidOptions}
+        yearOptions={yearOptions}
         totalRecords={records.length}
         onReset={onReset}
         onExport={handleExport}

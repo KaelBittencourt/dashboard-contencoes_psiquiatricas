@@ -44,21 +44,21 @@ const COLORS = [
 ];
 
 const tooltipStyle = {
-  backgroundColor: "hsl(220, 18%, 12%)",
-  border: "1px solid hsl(220, 15%, 22%)",
+  backgroundColor: "hsl(var(--popover))",
+  border: "1px solid hsl(var(--border))",
   borderRadius: "12px",
-  color: "hsl(213, 31%, 91%)",
+  color: "hsl(var(--popover-foreground))",
   fontSize: "13px",
 };
 
 const tooltipLabelStyle = {
-  color: "hsl(213, 31%, 91%)",
+  color: "hsl(var(--popover-foreground))",
   fontWeight: 600,
   marginBottom: "4px",
 };
 
 const tooltipItemStyle = {
-  color: "hsl(213, 20%, 70%)",
+  color: "hsl(var(--muted-foreground))",
 };
 
 interface MonthlyChartProps {
@@ -97,16 +97,16 @@ export function MonthlyChart({ data }: MonthlyChartProps) {
                   <stop offset="95%" stopColor="hsl(210, 100%, 56%)" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(220, 15%, 16%)" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
               <XAxis
                 dataKey="label"
-                tick={{ fill: "hsl(213, 20%, 55%)", fontSize: 12 }}
+                tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
                 axisLine={false}
                 tickLine={false}
                 tickMargin={12}
               />
               <YAxis
-                tick={{ fill: "hsl(213, 20%, 55%)", fontSize: 12 }}
+                tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
                 axisLine={false}
                 tickLine={false}
                 tickMargin={12}
@@ -116,7 +116,7 @@ export function MonthlyChart({ data }: MonthlyChartProps) {
                 contentStyle={tooltipStyle}
                 labelStyle={tooltipLabelStyle}
                 itemStyle={tooltipItemStyle}
-                cursor={{ stroke: "hsl(220, 15%, 26%)", strokeWidth: 1, strokeDasharray: "4 4" }}
+                cursor={{ stroke: "hsl(var(--muted-foreground))", strokeWidth: 1, strokeDasharray: "4 4" }}
                 formatter={(v: number) => [v, "Contenções"]}
               />
               <Area
@@ -125,7 +125,7 @@ export function MonthlyChart({ data }: MonthlyChartProps) {
                 stroke="hsl(210, 100%, 56%)"
                 fill="url(#colorCount)"
                 strokeWidth={3}
-                activeDot={{ r: 6, fill: "hsl(210, 100%, 56%)", stroke: "hsl(222, 47%, 11%)", strokeWidth: 4 }}
+                activeDot={{ r: 6, fill: "hsl(210, 100%, 56%)", stroke: "hsl(var(--card))", strokeWidth: 4 }}
                 name="Contenções"
               />
             </AreaChart>

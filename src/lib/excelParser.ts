@@ -1,5 +1,5 @@
 import * as XLSX from "xlsx";
-import type { RawRestraintRow, RestraintRecord } from "@/types/restraint";
+import type { DashboardFilters, RawRestraintRow, RestraintRecord } from "@/types/restraint";
 
 // Column name mappings (handles variations)
 const COL_MAP = {
@@ -328,18 +328,19 @@ export function getKPIs(records: RestraintRecord[]) {
 
 export function filterRecords(
   records: RestraintRecord[],
-  filters: { dateStart: string; dateEnd: string; cid: string; type: string }
+  filters: DashboardFilters
 ): RestraintRecord[] {
+  const months = new Set(filters.months);
+  const years = new Set(filters.years);
+
   return records.filter((r) => {
-    // Date filter
-    if (filters.dateStart && r.startDate) {
-      const start = new Date(filters.dateStart);
-      if (r.startDate < start) return false;
-    }
-    if (filters.dateEnd && r.startDate) {
-      const end = new Date(filters.dateEnd);
-      end.setHours(23, 59, 59);
-      if (r.startDate > end) return false;
+    if (months.size > 0 || years.size > 0) {
+      const [yearText, monthText] = r.month.split("-");
+      const year = Number(yearText);
+      const month = Number(monthText);
+      if (!year || !month) return false;
+      if (months.size > 0 && !months.has(month)) return false;
+      if (years.size > 0 && !years.has(year)) return false;
     }
 
     // CID filter

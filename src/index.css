@@ -6,7 +6,71 @@
 
 @layer base {
   :root {
-    /* Dark analytical dashboard theme */
+    color-scheme: light;
+
+    --background: 220 20% 97%;
+    --foreground: 220 25% 14%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 14%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 25% 14%;
+
+    --primary: 210 100% 46%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 16% 93%;
+    --secondary-foreground: 220 25% 18%;
+
+    --muted: 220 16% 93%;
+    --muted-foreground: 220 10% 40%;
+
+    --accent: 172 62% 32%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 48%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 14% 86%;
+    --input: 220 14% 86%;
+    --ring: 210 100% 46%;
+
+    --radius: 0.75rem;
+
+    --chart-blue: 210 100% 46%;
+    --chart-teal: 172 62% 34%;
+    --chart-orange: 28 92% 46%;
+    --chart-purple: 265 70% 50%;
+    --chart-rose: 350 75% 50%;
+    --chart-green: 142 62% 36%;
+
+    --kpi-border: 220 14% 86%;
+    --kpi-glow: 210 100% 46%;
+
+    --gradient-hero: linear-gradient(135deg, hsl(220 20% 98%) 0%, hsl(210 30% 94%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(220 20% 98%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(210 100% 48%) 0%, hsl(210 100% 40%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(172 62% 38%) 0%, hsl(172 62% 30%) 100%);
+    --gradient-modal: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(220 20% 97%) 100%);
+
+    --shadow-card: 0 4px 24px -4px hsl(220 20% 20% / 0.08);
+    --shadow-glow: 0 0 20px hsl(210 100% 46% / 0.12);
+    --shadow-kpi: 0 2px 12px hsl(220 20% 20% / 0.06);
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 25% 14%;
+    --sidebar-primary: 210 100% 46%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 16% 93%;
+    --sidebar-accent-foreground: 220 25% 14%;
+    --sidebar-border: 220 14% 86%;
+    --sidebar-ring: 210 100% 46%;
+  }
+
+  .dark {
+    color-scheme: dark;
+
     --background: 220 20% 8%;
     --foreground: 213 31% 91%;
 
@@ -35,9 +99,6 @@
     --input: 220 15% 18%;
     --ring: 210 100% 56%;
 
-    --radius: 0.75rem;
-
-    /* Custom dashboard tokens */
     --chart-blue: 210 100% 56%;
     --chart-teal: 172 66% 50%;
     --chart-orange: 28 100% 55%;
@@ -53,7 +114,6 @@
     --gradient-primary: linear-gradient(135deg, hsl(210 100% 56%) 0%, hsl(210 100% 45%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(172 66% 50%) 0%, hsl(172 66% 40%) 100%);
     --gradient-modal: linear-gradient(180deg, hsl(220 18% 14%) 0%, hsl(220 20% 8%) 100%);
-
 
     --shadow-card: 0 4px 24px -4px hsl(220 20% 4% / 0.6);
     --shadow-glow: 0 0 20px hsl(210 100% 56% / 0.15);

@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Calendar, Filter, RotateCcw, RefreshCw, ChevronDown, FileText, Image as ImageIcon, Printer, Download } from "lucide-react";
+import { useTheme } from "next-themes";
+import { Calendar, Filter, RotateCcw, RefreshCw, ChevronDown, FileText, Image as ImageIcon, Printer, Download, Moon, Sun } from "lucide-react";
 import type { DashboardFilters } from "@/types/restraint";
 import {
   DropdownMenu,
@@ -7,13 +9,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DatePicker } from "./DatePicker";
+import { MonthYearFilter } from "./PeriodSelect";
 
 
 interface DashboardHeaderProps {
   filters: DashboardFilters;
   onFilterChange: (filters: DashboardFilters) => void;
   cidOptions: string[];
+  yearOptions: number[];
   totalRecords: number;
   onReset: () => void;
   onExport: (type: 'pdf' | 'img') => void;
@@ -24,14 +27,24 @@ export function DashboardHeader({
   filters,
   onFilterChange,
   cidOptions,
+  yearOptions,
   totalRecords,
   onReset,
   onExport,
   isExporting = false,
 }: DashboardHeaderProps) {
-  const update = (key: keyof DashboardFilters, value: string) => {
+  const update = <K extends keyof DashboardFilters>(key: K, value: DashboardFilters[K]) => {
     onFilterChange({ ...filters, [key]: value });
   };
+
+  const { resolvedTheme, setTheme } = useTheme();
+  const [themeReady, setThemeReady] = useState(false);
+
+  useEffect(() => {
+    setThemeReady(true);
+  }, []);
+
+  const isDark = themeReady && resolvedTheme === "dark";
 
   return (
     <motion.div
@@ -57,6 +70,15 @@ export function DashboardHeader({
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setTheme(isDark ? "light" : "dark")}
+              aria-label={isDark ? "Ativar modo claro" : "Ativar modo escuro"}
+              title={isDark ? "Modo claro" : "Modo escuro"}
+              className="flex items-center justify-center w-[38px] h-[38px] rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted border border-border transition-all"
+            >
+              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
             <a
               href="https://docs.google.com/forms/d/e/1FAIpQLSfDL4r2FkYL5eDeZ-dRzxTpsORCLWvWE5Aogk_w-14vQ2ua2g/viewform"
               target="_blank"
@@ -102,21 +124,13 @@ export function DashboardHeader({
         </div>
 
         {/* Filters row */}
-        <div className="flex items-end gap-2.5 w-full">
-          {/* Date Picker Start */}
-          <DatePicker 
-            date={filters.dateStart}
-            onChange={(d) => update("dateStart", d)}
-            label="Data inicial"
-            className="w-[145px] shrink-0"
-          />
-
-          {/* Date Picker End */}
-          <DatePicker 
-            date={filters.dateEnd}
-            onChange={(d) => update("dateEnd", d)}
-            label="Data final"
-            className="w-[145px] shrink-0"
+        <div className="flex flex-wrap items-end gap-2.5 w-full">
+          <MonthYearFilter
+            months={filters.months}
+            years={filters.years}
+            yearOptions={yearOptions}
+            onMonthsChange={(months) => update("months", months)}
+            onYearsChange={(years) => update("years", years)}
           />
 
 
@@ -152,7 +166,12 @@ export function DashboardHeader({
           {/* Reset filters */}
           <button
             onClick={() =>
-              onFilterChange({ dateStart: "2022-08-01", dateEnd: "", cid: "all", type: "all" })
+              onFilterChange({
+                months: [],
+                years: yearOptions[0] ? [yearOptions[0]] : [],
+                cid: "all",
+                type: "all",
+              })
             }
             className="h-[38px] shrink-0 whitespace-nowrap flex items-center gap-1.5 px-3 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-muted border border-border transition-all"
           >

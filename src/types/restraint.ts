@@ -31,8 +31,8 @@ export interface RestraintRecord {
 }
 
 export interface DashboardFilters {
-  dateStart: string;
-  dateEnd: string;
+  months: number[];
+  years: number[];
   cid: string;
   type: "all" | "mechanical" | "chemical";
 }

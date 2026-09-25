@@ -269,7 +269,7 @@ export function DataTable({ records }: DataTableProps) {
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="max-w-2xl sm:rounded-2xl p-0 overflow-hidden border-none shadow-2xl bg-modal-gradient">
-          <div className="bg-card/50 backdrop-blur-xl border border-white/10 p-6">
+          <div className="bg-card/50 backdrop-blur-xl border border-border p-6">
             <DialogHeader className="mb-6">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
